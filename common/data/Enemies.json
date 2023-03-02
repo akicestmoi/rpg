@@ -1,0 +1,22 @@
+{
+    "enemy": [
+        {
+            "id": 1,
+            "name": "Slime",
+            "hp": 10,
+            "atk": 2,
+            "def": 2,
+            "spd": 1,
+            "givablexp": 3
+        },
+        {
+            "id": 2,
+            "name": "Goblin",
+            "hp": 20,
+            "atk": 1,
+            "def": 3,
+            "spd": 3,
+            "givablexp": 5
+        }
+    ]
+}
