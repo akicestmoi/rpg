@@ -1,0 +1,50 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v7.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v7.0": {
+      "ui/1.0.0": {
+        "dependencies": {
+          "back": "1.0.0",
+          "common": "1.0.0"
+        },
+        "runtime": {
+          "ui.dll": {}
+        }
+      },
+      "back/1.0.0": {
+        "dependencies": {
+          "common": "1.0.0"
+        },
+        "runtime": {
+          "back.dll": {}
+        }
+      },
+      "common/1.0.0": {
+        "runtime": {
+          "common.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "ui/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "back/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "common/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
