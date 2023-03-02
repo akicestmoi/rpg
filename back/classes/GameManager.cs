@@ -5,8 +5,10 @@ public class GameManager: IGameManager {
 
     public List<IPlayer> Players {get; set;}
     public List<IEnemy> Enemies {get; set;}
-    public IPlayerStatusNotifier playerStatusNotifier {get;set;}
-    public ICombatNotifier combatNotifier {get;set;}
+    public Notifier gameStatusNotifier {get;set;}
+    public Notifier playerStatusNotifier {get;set;}
+    public Notifier combatNotifier {get;set;}
+
 
     /* Constructor */
     public GameManager() {
@@ -14,10 +16,16 @@ public class GameManager: IGameManager {
         Settings settings = new Settings();
 
         /* Initialize all Notifiers */
-        this.playerStatusNotifier = new PlayerStatusNotifier();
-        this.combatNotifier = new CombatNotifier();
+        List<string> playerEventList = new List<string> { "Player_PropertyChange", "Player_LevelUp", "Player_XPGain", "Player_PlayerDeath" };
+        List<string> combatEventList = new List<string> { "Combat_NewTurn", "Combat_AttackDamage", "Combat_CombatEnd" };
+        List<string> gameEventList = new List<string> { "System_GameEnd" };
+        this.gameStatusNotifier = new GameStatusNotifier(gameEventList);
+        this.playerStatusNotifier = new PlayerStatusNotifier(playerEventList);
+        this.combatNotifier = new CombatNotifier(combatEventList);
+
 
         /* Initialize Enemies Data */
+        this.Enemies = new List<IEnemy>();
         this.GenerateEnemies(settings);
 
         /* Initialize Player Data */
@@ -59,28 +67,28 @@ public class GameManager: IGameManager {
 
         switch (probEventTrigger)
         {
-            case >= 0 and < 0.33:
+            case >= 0 and < 0.7:
                 if (this.IsEventHappening(0.9)) {
                     gameEvent = 1 ;
                 } else { 
-                    gameEvent = 3;
+                    gameEvent = 1;
                 };
                 break;
 
-            case >= 0.33 and < 0.66:
+            case >= 0.7 and < 0.8:
                 if (this.IsEventHappening(0.5)) {
                     gameEvent = 2 ;
                 } else { 
-                    gameEvent = 3;
+                    gameEvent = 1;
                 };
                 break;
 
-            case >= 0.66:
-                gameEvent = 3;
+            case >= 0.8:
+                gameEvent = 1;
                 break;
 
             default:
-                gameEvent = 3;
+                gameEvent = 1;
                 break;
         }
 
@@ -105,12 +113,18 @@ public class GameManager: IGameManager {
         Random rnd = new Random();
         int enemyID = rnd.Next(0, Enemies.Count);
 
-        return Enemies[0];
+        return Enemies[enemyID];
     }
 
 
-    public void EngageCombat(Player player, Enemy enemy) {
-        
+    public void ResetEnemy(IEnemy enemy) {
+        enemy.Status = CharacterStatus.Alive;
+        enemy.HP = enemy.MaxHP;
+    }
+
+
+    public void EngageCombat(IPlayer player, IEnemy enemy) {
+
         CombatManager CurrentCombat = new CombatManager(player, enemy);
 
         while (player.Status == CharacterStatus.Alive & enemy.Status == CharacterStatus.Alive) {
@@ -118,9 +132,13 @@ public class GameManager: IGameManager {
         }
 
         this.combatNotifier.NotifyCombatEnd(player.Status, enemy.Name);
+        this.ResetEnemy(enemy);
         
         if (player.Status == CharacterStatus.Alive) {
             player.GainXP(enemy.GivableXP, this.playerStatusNotifier);
+        } else {
+            this.playerStatusNotifier.NotifyPlayerDeath();
+            this.gameStatusNotifier.NotifyGameEnd();
         }
     }
 }

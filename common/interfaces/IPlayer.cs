@@ -1,8 +1,8 @@
-public interface IPlayer {
+public interface IPlayer: ICharacter {
 
     public int XP {get;}
     public int Level {get;}
 
-    public void GainXP(int xp, IPlayerStatusNotifier playerStatusNotifier);
-    public void LevelUp(IPlayerStatusNotifier playerStatusNotifier);
+    public void GainXP(int xp, Notifier playerStatusNotifier);
+    public void LevelUp(Notifier playerStatusNotifier);
 }

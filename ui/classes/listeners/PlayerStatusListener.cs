@@ -1,11 +1,9 @@
-public class PlayerStatusListener: IPlayerStatusListener {
+public class PlayerStatusListener: Listener {
 
-    public PlayerStatusListener(IPlayerStatusNotifier notifier) {
-        notifier.RegisterListener(this);
-    }
+    public PlayerStatusListener(Notifier notifier, List<string> eventList) : base (notifier, eventList) {}
 
 
-    public void onPlayerCreation(GameManager gameManager, string playerName) {
+    public override void onPlayerCreation(IGameManager gameManager, string playerName) {
 
         /* POST */
         gameManager.RegisterPlayer(playerName);
@@ -13,7 +11,7 @@ public class PlayerStatusListener: IPlayerStatusListener {
         Console.WriteLine(Environment.NewLine + "Character created!");
 
         /* GET */
-        Player player = gameManager.Players[0];
+        IPlayer player = gameManager.Players[0];
 
         Console.WriteLine(Environment.NewLine + "Player characteristics:");
         Console.WriteLine($"Player Name: " + player.Name);
@@ -26,17 +24,17 @@ public class PlayerStatusListener: IPlayerStatusListener {
     }
 
 
-    public void onPropertyChange(string property, string value) {
+    public override void onPropertyChange(string property, string value) {
 
         /* This is a GET, but currently the Backend is directly calling it from the notifier */
         Console.WriteLine($"Your {property} is now at: {value}");
     }
 
 
-    public void onLevelUp(int level, int maxHp, int atk, int def, int spd) {
+    public override void onLevelUp(int level, int maxHp, int atk, int def, int spd) {
 
         /* This is a GET, but currently the Backend is directly calling it from the notifier */
-        Console.WriteLine(Environment.NewLine + $"You reached level: {level.ToString()}!");
+        Console.WriteLine(Environment.NewLine + $"Congratulation! You reached level: {level.ToString()}!");
         Console.WriteLine("New Player characteristics:");
         Console.WriteLine($"Player HP: {maxHp.ToString()}");
         Console.WriteLine($"Player ATK: {atk.ToString()}");
@@ -45,13 +43,13 @@ public class PlayerStatusListener: IPlayerStatusListener {
 
     }
 
-    public void onXPGain(int xp) {
+    public override void onXPGain(int xp) {
 
         /* This is a GET, but currently the Backend is directly calling it from the notifier */
-        Console.WriteLine($"You Gain {xp.ToString()}XP");
+        Console.WriteLine($"You Gain {xp.ToString()} XP");
     }
 
-    public void onDeath() {
+    public override void onPlayerDeath() {
 
         /* This is a GET, but currently the Backend is directly calling it from the notifier */
         Console.WriteLine("You are dead. Game over");

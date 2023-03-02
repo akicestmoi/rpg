@@ -1,16 +1,18 @@
-public class GameStatusListener: IGameStatusListener {
+public class GameStatusListener: Listener {
 
-    public GameStatusListener() {
-    }
+    public bool isGameOver {get; set;}
 
-    public void onGameStart() {
+    public GameStatusListener(Notifier notifier, List<string> eventList) : base (notifier, eventList) { isGameOver = false; }
+
+
+    public override void onGameStart() {
 
         Console.WriteLine("Welcome to Aki's RPG!");
         Console.WriteLine("Please enter your character name:");
         
     }
 
-    public void onPlayerTurn() {
+    public override void onPlayerTurn() {
 
         Console.WriteLine(Environment.NewLine + "Your Move!");
         Console.WriteLine("Which way do you want to go?");
@@ -21,7 +23,7 @@ public class GameStatusListener: IGameStatusListener {
 
     }
 
-    public void onPlayerMove(GameManager gameManager) {
+    public override void onPlayerMove(IGameManager gameManager) {
         
         int gameEventID = gameManager.eventTrigger();
         switch (gameEventID)
@@ -42,14 +44,18 @@ public class GameStatusListener: IGameStatusListener {
         }
     }
 
-    public void onEnemyEncounter(GameManager gameManager) {
+    public override void onEnemyEncounter(IGameManager gameManager) {
 
-        Player player = gameManager.Players[0];
+        IPlayer player = gameManager.Players[0];
         gameManager.EngageCombat(player, gameManager.DefineEncounteredEnemy());
 
     }
 
-    public void onGameEnd() {
+    public override void onGameEnd() {
+
+        /* This is a GET, but currently the Backend is directly calling it from the notifier */
+        this.isGameOver = true;
+
         Console.WriteLine(Environment.NewLine);
         Console.WriteLine("Thanks for playing the game!");
     }

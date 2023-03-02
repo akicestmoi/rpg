@@ -1,32 +1,23 @@
-public class CombatNotifier: ICombatNotifier {
+public class CombatNotifier: Notifier {
 
-    public List<ICombatListener> Listeners {get; set;}
+    public CombatNotifier(List<string> eventList) : base(eventList) {}
 
-
-    /* Constructor */
-     public CombatNotifier() {
-        this.Listeners = new List<ICombatListener>();
-    } 
-
-
-    public void RegisterListener(ICombatListener listener) {
-        Listeners.Add(listener);
+    public override void NotifyNewTurn(ICharacter firstCharacter, ICharacter secondCharacter) {
+        foreach (Listener listener in this.Listeners["Combat_NewTurn"]) {
+            listener.onNewTurn(firstCharacter, secondCharacter);
+        }
     }
 
 
-    public void UnregisterListener(ICombatListener listener) {
-        Listeners.Remove(listener);
-    }
-
-
-    public void NotifyAttackDamage(string attackerName, string damage) {
-        foreach (ICombatListener listener in this.Listeners) {
+    public override void NotifyAttackDamage(string attackerName, string damage) {
+        foreach (Listener listener in this.Listeners["Combat_AttackDamage"]) {
             listener.onAttack(attackerName, damage);
         }
     }
 
-    public void NotifyCombatEnd(CharacterStatus currentStatus, string enemyName) {
-        foreach (ICombatListener listener in this.Listeners) {
+
+    public override void NotifyCombatEnd(CharacterStatus currentStatus, string enemyName) {
+        foreach (Listener listener in this.Listeners["Combat_CombatEnd"]) {
             listener.onCombatEnd(currentStatus, enemyName);
         }
     }

@@ -7,6 +7,6 @@ public interface ICharacter {
     public int DEF {get; set;}
     public int SPD {get; set;}
 
-    public int Attack();
+    public int Attack(ICharacter opponent);
     public void TakeHit(int damage);
 }

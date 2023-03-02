@@ -1,4 +1,4 @@
-﻿public class Enemy: Character, IEnemy{
+﻿public class Enemy: Character, ICharacter, IEnemy{
 
     public int ID {get; set;}
     public int GivableXP {get; set;}

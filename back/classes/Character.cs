@@ -9,9 +9,9 @@ public abstract class Character: ICharacter {
     public int SPD {get; set;}
 
 
-    public int Attack() {
+    public int Attack(ICharacter opponent) {
 
-        double preDamage = Math.Min(ATK * 1.5 - DEF, 1.0);
+        double preDamage = Math.Max(this.ATK * 1.5 - opponent.DEF, 1.0);
         int damage = (int)Math.Round(preDamage);
 
         return damage;
@@ -19,7 +19,7 @@ public abstract class Character: ICharacter {
 
 
     public void TakeHit(int damage) {
-        this.HP = Math.Max(damage, 0);
+        this.HP = Math.Max(this.HP - damage, 0);
         if (this.HP == 0) {this.Status = CharacterStatus.Dead;}
     }
 

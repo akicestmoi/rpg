@@ -1,10 +1,10 @@
-public class Player: Character, IPlayer {
+public class Player: Character, ICharacter, IPlayer {
 
     public int XP {get; private set;}
     public int Level {get; private set;}
     
     
-    private static Dictionary<int, int> LevelUpTable = Enumerable.Range(0, 99).ToDictionary(x => x, x => (int)Math.Round(10*(Math.Pow(1.05, x))));
+    private static Dictionary<int, int> LevelUpTable = Enumerable.Range(0, 99).ToDictionary(x => x, x => (int)Math.Pow(x,2) + 10*x);
 
 
     public Player(string playerName) {
@@ -23,10 +23,11 @@ public class Player: Character, IPlayer {
         this.SPD = rnd.Next(1, 5);
     }
 
-    public void GainXP(int xp, IPlayerStatusNotifier playerStatusNotifier) {
-        
+    public void GainXP(int xp, Notifier playerStatusNotifier) {
+                
         int xpNeeded = LevelUpTable[Level];
 
+        playerStatusNotifier.NotifyXPGain(xp);
         XP += xp;
 
         if (XP >= xpNeeded ) {
@@ -35,7 +36,7 @@ public class Player: Character, IPlayer {
     }
 
 
-    public void LevelUp(IPlayerStatusNotifier playerStatusNotifier) {
+    public void LevelUp(Notifier playerStatusNotifier) {
 
         Random rnd = new Random();
 
