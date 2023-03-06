@@ -3,20 +3,46 @@
         {
             "id": 1,
             "name": "Slime",
+            "levelThreshold": 1,
             "hp": 10,
             "atk": 2,
             "def": 2,
             "spd": 1,
-            "givablexp": 3
+            "givablExp": 3,
+            "givableGold": 2
         },
         {
             "id": 2,
             "name": "Goblin",
+            "levelThreshold": 1,
             "hp": 20,
             "atk": 1,
             "def": 3,
             "spd": 3,
-            "givablexp": 5
+            "givablexp": 5,
+            "givableGold" : 4
+        },
+        {
+            "id": 4,
+            "name": "Ghoul",
+            "levelThreshold": 5,
+            "hp": 70,
+            "atk": 10,
+            "def": 5,
+            "spd": 2,
+            "givablexp": 20,
+            "givableGold" : 30
+        },
+        {
+            "id": 5,
+            "name": "Dragon",
+            "levelThreshold": 10,
+            "hp": 200,
+            "atk": 20,
+            "def": 20,
+            "spd": 20,
+            "givablexp": 200,
+            "givableGold" : 300
         }
     ]
 }

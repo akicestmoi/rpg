@@ -11,7 +11,7 @@ public class PlayerStatusListener: Listener {
         Console.WriteLine(Environment.NewLine + "Character created!");
 
         /* GET */
-        IPlayer player = gameManager.Players[0];
+        IPlayer player = gameManager.Player;
 
         Console.WriteLine(Environment.NewLine + "Player characteristics:");
         Console.WriteLine($"Player Name: " + player.Name);
@@ -46,7 +46,33 @@ public class PlayerStatusListener: Listener {
     public override void onXPGain(int xp) {
 
         /* This is a GET, but currently the Backend is directly calling it from the notifier */
-        Console.WriteLine($"You Gain {xp.ToString()} XP");
+        Console.WriteLine($"You gain {xp.ToString()} XP");
+    }
+
+    public override void onHeal(int healingAmount) {
+
+        /* This is a GET, but currently the Backend is directly calling it from the notifier */
+        Console.WriteLine($"You healed {healingAmount.ToString()} HP");
+    }
+
+    public override void onGoldGain(int gold) {
+        Console.WriteLine($"You found {gold.ToString()} G");
+    }
+
+    public override void onGoldUsage(int gold) {
+        Console.WriteLine($"You spent {gold.ToString()} G");
+    }
+
+    public override void onItemPickup(string itemName) {
+        Console.WriteLine($"You picked up a {itemName} and you put it in your inventory");
+    }
+
+    public override void onInventoryFull() {
+        Console.WriteLine("Your inventory is full! You should either use, sell or drop an item!");
+    }
+
+    public override void onItemUse(string itemName) {
+        Console.WriteLine($"You used {itemName}");
     }
 
     public override void onPlayerDeath() {

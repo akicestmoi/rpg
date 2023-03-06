@@ -3,20 +3,19 @@
     {
         static void Main(string[] args)
         {
+            /* Instanciation of the Poster*/
+            var battlePoster = new BattlePoster();
 
             /* Instanciation of the Backend Game Manager*/
-            GameManager gameManager = new GameManager();
+            var gameManager = new GameManager(battlePoster);
 
             /* Instanciation of Communicator to Backend */
-            FrontCommunicator communicator = new FrontCommunicator();
+            var communicator = new FrontCommunicator();
 
             /* Instanciation of all Listeners and Registering to repsective Notifiers */
-            List<string> playerEventList = new List<string> { "Player_PropertyChange", "Player_LevelUp", "Player_XPGain", "Player_PlayerDeath" };
-            List<string> combatEventList = new List<string> { "Combat_NewTurn", "Combat_AttackDamage", "Combat_CombatEnd" };
-            List<string> gameEventList = new List<string> { "System_GameEnd" };
-            GameStatusListener gameStatusListener = new GameStatusListener(gameManager.gameStatusNotifier, gameEventList);
-            PlayerStatusListener playerStatusListener = new PlayerStatusListener(gameManager.playerStatusNotifier, playerEventList);
-            CombatListener combatListener = new CombatListener(gameManager.combatNotifier, combatEventList);
+            var gameStatusListener = new GameStatusListener(gameManager.gameStatusNotifier, gameManager.settings.AllGameEvents["gameEventList"]);
+            var playerStatusListener = new PlayerStatusListener(gameManager.playerStatusNotifier, gameManager.settings.AllGameEvents["playerEventList"]);
+            var battleListener = new BattleListener(gameManager.battleNotifier, gameManager.settings.AllGameEvents["battleEventList"]);
             
 
             gameStatusListener.onGameStart();

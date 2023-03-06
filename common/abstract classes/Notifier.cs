@@ -9,22 +9,27 @@ public abstract class Notifier {
         
         foreach (string eventType in eventList) {
             List<Listener> eventListeners = new List<Listener>();
-            Listeners.Add(eventType, eventListeners);
+            this.Listeners.Add(eventType, eventListeners);
         }
     }
 
     public void Subscribe(string eventType, Listener listener) {
-        Listeners[eventType].Add(listener);
+        this.Listeners[eventType].Add(listener);
     }
 
 
     public void Unsubscribe(string eventType, Listener listener) {
-        Listeners[eventType].Remove(listener);
+        this.Listeners[eventType].Remove(listener);
     }
 
 
 
     /* Game Status */
+    public virtual void NotifyNoEvent() {}
+    public virtual void NotifyEnemyEncounter() {}
+    public virtual void NotifyChestFound() {}
+    public virtual void NotifyMerchantEncounter() {}
+    public virtual void NotifyFountainFound() {}
     public virtual void NotifyGameEnd() {}
 
 
@@ -32,11 +37,19 @@ public abstract class Notifier {
     public virtual void NotifyPropertyChange(string property, string value) {}
     public virtual void NotifyLevelUp(int level, int maxHp, int atk, int def, int spd) {}
     public virtual void NotifyXPGain(int xp) {}
+    public virtual void NotifyHeal(int healingAmount) {}
+    public virtual void NotifyGoldGain(int gold) {}
+    public virtual void NotifyGoldUsage(int gold) {}
+    public virtual void NotifyItemPickup(string itemName) {}
+    public virtual void NotifyInventoryFull() {}
+    public virtual void NotifyItemUse(string itemName) {}
     public virtual void NotifyPlayerDeath() {}
 
 
-    /* Combat */
-    public virtual void NotifyNewTurn(ICharacter firstCharacter, ICharacter secondCharacter) {}
+    /* Battle */
+    public virtual void NotifyNewTurn(List<ICharacter> allies, List<IEnemy> enemies) {}
     public virtual void NotifyAttackDamage(string attackerName, string damage) {}
-    public virtual void NotifyCombatEnd(CharacterStatus currentStatus, string enemyName) {}
+    public virtual void NotifiyEnemyDefeat(string enemyName) {}
+    public virtual void NotifyEscapeFail() {}
+    public virtual void NotifyBattleEnd(bool hasEscaped) {}
 }
