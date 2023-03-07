@@ -30,8 +30,9 @@ public class Settings {
 
         /* Deictionary containing Game mechanics parameters */
         this.MechanicsParameters = new Dictionary<string, double> {
-            { "Healing_Fountain_Effect", 0.1 },
-            { "Item_Healing_Effect", 0.05 },
+            { "Max_Different_Enemy_Type_in_One_Encounter", 2 },
+            { "Healing_Fountain_Effect", 0.5 },
+            { "Item_Healing_Effect", 0.2 },
             { "Inventory_Capacity", 16 }
         };
 

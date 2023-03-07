@@ -1,5 +1,5 @@
 public interface ICharacter {
-    public string Name {get;}
+    public string Name {get; set;}
     public CharacterType CharacterType {get; set;}
     public CharacterStatus Status {get; set;}
     public int MaxHP {get; set;}

@@ -1,13 +1,14 @@
 public class BattlePoster: Poster {
 
-    public override int onUserBattleChoiceRequest() {
+    public override int onUserBattleChoiceRequest(List<BattleChoices> availableChoices) {
 
         Console.WriteLine(Environment.NewLine + "Choose your action for this turn:");
-        Console.WriteLine("1. Attack Enemy");
-        Console.WriteLine("2. Use Item");
-        Console.WriteLine("3. Run away");
         
-        int userInput = this.InputChecker(3);
+        foreach (var choice in availableChoices.Select((value, index) => (value, index))) {
+            Console.WriteLine($"{choice.index + 1}. {choice.value.ToDescriptionString()}");
+        }
+
+        int userInput = this.InputChecker(availableChoices.Count) - 1;
 
         return userInput;
     }

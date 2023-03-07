@@ -1,8 +1,11 @@
+using System.Text.Json;
+
+
 public class EventManager: IEventManager {
     
     public IPlayer Player {get; private set;}
-    public List<IEnemy> Enemies {get;}
-    public List<IItem> Items {get;}
+    public List<IEnemy> EnemiesTemplate {get;}
+    public List<IItem> ItemsTemplate {get;}
     public Settings settings {get;}
     public IBattleManager battleManager {get;}
     public Notifier gameStatusNotifier {get;}
@@ -10,21 +13,10 @@ public class EventManager: IEventManager {
     public Notifier battleNotifier {get;}
 
 
-    /* Pour plus tard... */
-/*     public bool IsEventHappening(double threshold) {
-        var rnd = new Random();
-
-        int diceRollRange = 100;
-        double diceRoll = rnd.Next(1, diceRollRange);
-        double probHappening = diceRoll / diceRollRange;
-
-        return probHappening >= threshold;
-    } */
-
-    public EventManager(IPlayer player, List<IEnemy> enemies, List<IItem> items, Settings settings, IBattleManager battleManager, Notifier gameStatusNotifier, Notifier playerStatusNotifier, Notifier battleNotifier) {
+    public EventManager(IPlayer player, List<IEnemy> enemiesTemplate, List<IItem> itemsTemplate, Settings settings, IBattleManager battleManager, Notifier gameStatusNotifier, Notifier playerStatusNotifier, Notifier battleNotifier) {
         this.Player = player;
-        this.Enemies = enemies;
-        this.Items = items;
+        this.EnemiesTemplate = enemiesTemplate;
+        this.ItemsTemplate = itemsTemplate;
         this.settings = settings;
         this.battleManager = battleManager;
         this.gameStatusNotifier = gameStatusNotifier;
@@ -39,31 +31,69 @@ public class EventManager: IEventManager {
 
     /* Enemy Encounter */
     public void BattleEvent() {
-        IEnemy encounteredEnemy = this.DefineEncounteredEnemy();
+
         var battleAllies = new List<ICharacter> {
             this.Player
         };
-        var battleEnemies = new List<IEnemy> {
-            encounteredEnemy
-        };
+
+        Dictionary<int, int> encounteredEnemies = this.DefineEncounteredEnemies();
+        var battleEnemies = new List<IEnemy>();
+        foreach (var (enemyID, numberOfThisEnemyType) in encounteredEnemies.Select(x => (x.Key, x.Value))) {
+            for (int i = 0; i < numberOfThisEnemyType; i++) {
+                var newEnemy = this.GenerateEnemyFromTemplate(enemyID);
+                if (numberOfThisEnemyType > 1) { newEnemy.Name = string.Format("{0} {1}", newEnemy.Name, (char)(i+65)); }
+                battleEnemies.Add(newEnemy);
+            }
+        }
+
         battleManager.Battle(battleAllies, battleEnemies);
     }
 
-    public IEnemy DefineEncounteredEnemy() {
+
+    public Dictionary<int, int> DefineEncounteredEnemies() {
 
         var filteredEnemyIDList = new List<int>();
 
-        foreach (var potentialEnemy in this.Enemies.Select((value, index) => (value, index))) {
+        foreach (var potentialEnemy in this.EnemiesTemplate.Select((value, index) => (value, index))) {
             if (potentialEnemy.value.LevelThreshold <= this.Player.Level) {
                 filteredEnemyIDList.Add(potentialEnemy.index);
             }
         }
 
         var rnd = new Random();
-        int potentialEnemyID = rnd.Next(0, filteredEnemyIDList.Count);
-        int enemyID = filteredEnemyIDList[potentialEnemyID];
 
-        return this.Enemies[enemyID];
+        int potentialDifferentEnemy = rnd.Next(1, (int)this.settings.MechanicsParameters["Max_Different_Enemy_Type_in_One_Encounter"]); 
+        var encounteredEnemies = new Dictionary<int, int>();
+        for (int i = 0; i < potentialDifferentEnemy; i++) {
+
+            int potentialEnemyID = rnd.Next(0, filteredEnemyIDList.Count);
+            int enemyID = filteredEnemyIDList[potentialEnemyID];
+
+            int numberOfThisEnemyType = rnd.Next(1, this.EnemiesTemplate[enemyID].SimultaneousApperance + 1); 
+
+            Console.WriteLine(potentialEnemyID);
+            Console.WriteLine(enemyID);
+            Console.WriteLine(this.EnemiesTemplate[enemyID].SimultaneousApperance);
+            Console.WriteLine(numberOfThisEnemyType);
+
+            encounteredEnemies.Add(enemyID, numberOfThisEnemyType);
+        }
+
+        return encounteredEnemies;
+    }
+
+
+    public IEnemy GenerateEnemyFromTemplate(int enemyID) {
+
+        var jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+
+        string enemyJson = File.ReadAllText(this.settings.JsonLocation["EnemyList"]);
+        var enemyList = JsonSerializer.Deserialize<EnemyList>(enemyJson, jsonOptions)!;
+
+        Enemy generatedEnemy = enemyList.Enemy[enemyID];
+        generatedEnemy.setStatus();
+
+        return generatedEnemy;
     }
 
 
@@ -75,14 +105,15 @@ public class EventManager: IEventManager {
 
     public IItem DefineTreasureContent() {
         var rnd = new Random();
-        int itemID = rnd.Next(0, this.Items.Count);
+        int itemID = rnd.Next(0, this.ItemsTemplate.Count);
 
-        return this.Items[itemID];
+        return this.ItemsTemplate[itemID];
     }
 
 
     /* Merchant */
     public void MerchantEvent() {
+        /* */
     }
 
 

@@ -25,7 +25,7 @@ public abstract class Poster {
 
 
     /* Battle */
-    public virtual int onUserBattleChoiceRequest() {return 0;}
+    public virtual int onUserBattleChoiceRequest(List<BattleChoices> availableChoices) {return 0;}
     public virtual int onUserTargetRequest(List<IEnemy> enemies) {return 0;}
     public virtual int onUserItemRequest(IPlayer player) {return 0;}
 }

@@ -9,9 +9,9 @@ public class BattleNotifier: Notifier {
     }
 
 
-    public override void NotifyAttackDamage(string attackerName, string damage) {
+    public override void NotifyAttackDamage(string attackerName, int damage, string targetName) {
         foreach (Listener listener in this.Listeners["Battle_AttackDamage"]) {
-            listener.onAttack(attackerName, damage);
+            listener.onAttack(attackerName, damage, targetName);
         }
     }
 

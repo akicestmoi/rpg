@@ -28,3 +28,5 @@ D:\Code\rpg\common\obj\Debug\net7.0\refint\common.dll
 D:\Code\rpg\common\obj\Debug\net7.0\common.pdb
 D:\Code\rpg\common\obj\Debug\net7.0\common.genruntimeconfig.cache
 D:\Code\rpg\common\obj\Debug\net7.0\ref\common.dll
+D:\Code\rpg\common\bin\Debug\net7.0\Newtonsoft.Json.dll
+D:\Code\rpg\common\obj\Debug\net7.0\common.csproj.CopyComplete

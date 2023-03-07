@@ -4,8 +4,8 @@ using System.Text.Json;
 public class GameManager: IGameManager {
 
     public IPlayer Player {get; private set;}
-    public List<IEnemy> Enemies {get;}
-    public List<IItem> Items {get;}
+    public List<IEnemy> EnemiesTemplate {get;}
+    public List<IItem> ItemsTemplate {get;}
     public Settings settings {get;}
     public IBattleManager battleManager {get;}
     public IEventManager eventManager {get;}
@@ -26,11 +26,11 @@ public class GameManager: IGameManager {
 
 
         /* Initialize Items Data */
-        this.Items = new List<IItem>();
+        this.ItemsTemplate = new List<IItem>();
         this.GenerateItems(settings);
 
         /* Initialize Enemies Data */
-        this.Enemies = new List<IEnemy>();
+        this.EnemiesTemplate = new List<IEnemy>();
         this.GenerateEnemies(settings);
 
         /* Initialize Player Data */
@@ -38,7 +38,7 @@ public class GameManager: IGameManager {
 
         /* Initialize all Managers */
         this.battleManager = new BattleManager(this.Player, this.settings, this.gameStatusNotifier, this.playerStatusNotifier, this.battleNotifier, battlePoster);
-        this.eventManager = new EventManager(this.Player, this.Enemies, this.Items, this.settings, this.battleManager, this.gameStatusNotifier, this.playerStatusNotifier, this.battleNotifier);
+        this.eventManager = new EventManager(this.Player, this.EnemiesTemplate, this.ItemsTemplate, this.settings, this.battleManager, this.gameStatusNotifier, this.playerStatusNotifier, this.battleNotifier);
     }
 
 
@@ -51,7 +51,7 @@ public class GameManager: IGameManager {
 
         foreach (Enemy enemy in enemyList.Enemy) {
             enemy.setStatus();
-            this.Enemies.Add(enemy);
+            this.EnemiesTemplate.Add(enemy);
         }
     }
 
@@ -64,7 +64,7 @@ public class GameManager: IGameManager {
         var itemList = JsonSerializer.Deserialize<ItemList>(itemJson, jsonOptions)!;
 
         foreach (Item item in itemList.Item) {
-            this.Items.Add(item);
+            this.ItemsTemplate.Add(item);
         }
     }
 
@@ -79,9 +79,7 @@ public class GameManager: IGameManager {
         
         var rnd = new Random();
 
-        int diceRollRange = 100;
-        double diceRoll = rnd.Next(1, diceRollRange);
-        double probEventTrigger = diceRoll / diceRollRange;
+        double probEventTrigger = rnd.NextDouble();
 
         switch (probEventTrigger)
         {

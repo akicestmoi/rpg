@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "nEuzVglKr47A5TcZX49ncrJT8iIXXxpCyyItA3OkIQM+aj+IMksyK3oK9tSKpKanPPt4mmgOtLLjoi4+6FJ75g==",
+  "dgSpecHash": "GxZFwXhk5oPtFhov2QK92sqh/k3iNmf+M1szpLW67M3d1B5uXjd4mKmnTwG4CZzLMPS+Uwl1DIbq6+UxCMiH+w==",
   "success": true,
   "projectFilePath": "D:\\Code\\rpg\\ui\\ui.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\Aki\\.nuget\\packages\\newtonsoft.json\\13.0.2\\newtonsoft.json.13.0.2.nupkg.sha512"
+  ],
   "logs": []
 }

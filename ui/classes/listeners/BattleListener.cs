@@ -17,8 +17,8 @@ public class BattleListener: Listener {
     }
 
 
-    public override void onAttack(string attacker, string damage) {
-        Console.WriteLine($"{attacker} attacks and inflicts {damage} damages");
+    public override void onAttack(string attackerName, int damage, string targetName) {
+        Console.WriteLine($"{attackerName} attacks and inflicts {damage.ToString()} damages to {targetName}");
     }
 
 

@@ -48,7 +48,7 @@ public abstract class Notifier {
 
     /* Battle */
     public virtual void NotifyNewTurn(List<ICharacter> allies, List<IEnemy> enemies) {}
-    public virtual void NotifyAttackDamage(string attackerName, string damage) {}
+    public virtual void NotifyAttackDamage(string attackerName, int damage, string targetName) {}
     public virtual void NotifiyEnemyDefeat(string enemyName) {}
     public virtual void NotifyEscapeFail() {}
     public virtual void NotifyBattleEnd(bool hasEscaped) {}

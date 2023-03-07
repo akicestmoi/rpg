@@ -1,7 +1,7 @@
 public interface IGameManager {
     public IPlayer Player {get;}
-    public List<IEnemy> Enemies {get;}
-    public List<IItem> Items {get;}
+    public List<IEnemy> EnemiesTemplate {get;}
+    public List<IItem> ItemsTemplate {get;}
     public Settings settings {get;}
     public IBattleManager battleManager {get;}
     public IEventManager eventManager {get;}

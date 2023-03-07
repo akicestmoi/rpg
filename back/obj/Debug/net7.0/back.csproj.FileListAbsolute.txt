@@ -40,3 +40,4 @@ D:\Code\rpg\back\bin\Debug\net7.0\common.pdb
 D:\Code\rpg\back\obj\Debug\net7.0\back.csproj.CopyComplete
 D:\Code\rpg\back\obj\Debug\net7.0\back.genruntimeconfig.cache
 D:\Code\rpg\back\obj\Debug\net7.0\ref\back.dll
+D:\Code\rpg\back\bin\Debug\net7.0\Newtonsoft.Json.dll

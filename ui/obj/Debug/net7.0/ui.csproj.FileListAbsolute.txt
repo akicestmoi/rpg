@@ -50,3 +50,4 @@ D:\Code\rpg\ui\obj\Debug\net7.0\ui.csproj.CoreCompileInputs.cache
 D:\Code\rpg\ui\obj\Debug\net7.0\ui.csproj.CopyComplete
 D:\Code\rpg\ui\obj\Debug\net7.0\ui.genruntimeconfig.cache
 D:\Code\rpg\ui\obj\Debug\net7.0\ref\ui.dll
+D:\Code\rpg\ui\bin\Debug\net7.0\Newtonsoft.Json.dll

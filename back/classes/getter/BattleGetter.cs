@@ -4,8 +4,8 @@ public class BattleGetter: Getter {
         this.poster = poster;
     }
 
-    public override int getUserBattleChoice() {
-        int userInput = this.poster.onUserBattleChoiceRequest();
+    public override int getUserBattleChoice(List<BattleChoices> availableChoices) {
+        int userInput = this.poster.onUserBattleChoiceRequest(availableChoices);
         return userInput;
     }
 

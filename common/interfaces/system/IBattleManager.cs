@@ -17,8 +17,10 @@ public interface IBattleManager {
     public void UpdatePlayerInfo(IPlayer player);
     public void Battle(List<ICharacter> allies, List<IEnemy> enemies);
     public void OneTurn();
-    public void SetMoveOrder();
-    public void AttackEvent(ICharacter attacker);
-    public void ItemUseEvent();
+    public List<BattleChoices> SetBattleChoices();
+    public (BattleChoices, int) GetAllUserInput();
+    public void SetMoveOrder(BattleChoices userAction);
+    public void AttackEvent(ICharacter attacker, int userChoice);
+    public void ItemUseEvent(int userChoice);
     public void EscapeEvent();
 }

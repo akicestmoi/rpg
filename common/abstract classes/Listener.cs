@@ -20,7 +20,7 @@ public abstract class Listener {
 
     /* Battle */
     public virtual void onNewTurn(List<ICharacter> allies, List<IEnemy> enemies) {}
-    public virtual void onAttack(string attacker, string damage) {}
+    public virtual void onAttack(string attackerName, int damage, string targetName) {}
     public virtual void onEnemyDefeat(string enemyName) {}
     public virtual void onEscapeFail() {}
     public virtual void onBattleEnd(bool hasEscaped) {}

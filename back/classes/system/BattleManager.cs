@@ -63,19 +63,22 @@ public class BattleManager: IBattleManager {
     public void OneTurn() {
 
         this.battleNotifier.NotifyNewTurn(this.BattleAllies, this.BattleEnemies);
-        int userBattleChoice = this.getter.getUserBattleChoice();
-        this.SetMoveOrder();
+        (BattleChoices Action, int Choice) userInput = GetAllUserInput();
+
+        this.SetMoveOrder(userInput.Action);
 
         foreach (ICharacter participant in this.moveOrder) {
             
-            BattleChoices turnAction = participant.CharacterType == CharacterType.Player ? (BattleChoices)userBattleChoice : BattleChoices.Attack;
+            BattleChoices turnAction = participant.CharacterType == CharacterType.Player ? userInput.Action : BattleChoices.Attack;
             
-            if (turnAction == BattleChoices.Attack) {
-                this.AttackEvent(participant);
-            } else if (turnAction == BattleChoices.Item) {
-                this.ItemUseEvent();
-            } else if (turnAction == BattleChoices.Run) {
-                this.EscapeEvent();
+            if (participant.Status == CharacterStatus.Alive) {
+                if (turnAction == BattleChoices.Attack) {
+                    this.AttackEvent(participant, userInput.Choice);
+                } else if (turnAction == BattleChoices.Item) {
+                    this.ItemUseEvent(userInput.Choice);
+                } else if (turnAction == BattleChoices.Run) {
+                    this.EscapeEvent();
+                }
             }
 
             if (!this.IsBattle) {break;}
@@ -83,24 +86,59 @@ public class BattleManager: IBattleManager {
     }
 
 
-    public void SetMoveOrder() {
-        this.moveOrder = this.BattleAllies.Concat(this.BattleEnemies).OrderByDescending(x => x.SPD).ThenBy(x => x.CharacterType);
+    public List<BattleChoices> SetBattleChoices() {
+        if (this.Player.Inventory.Count == 0) {
+            return new List<BattleChoices> { BattleChoices.Attack, BattleChoices.Run };
+        } else {
+            return new List<BattleChoices> { BattleChoices.Attack, BattleChoices.Item, BattleChoices.Run };
+        }
     }
 
 
-    public void AttackEvent(ICharacter attacker) {
+    public (BattleChoices, int) GetAllUserInput() {
+
+        int defaultInput = 0;
+
+        var availableChoices = SetBattleChoices();
+        int userBattleChoice = this.getter.getUserBattleChoice(availableChoices);
+
+        var userAction = availableChoices[userBattleChoice];
+
+        if (userAction == BattleChoices.Attack) {
+            int userChoice = this.getter.getUserTarget(this.BattleEnemies);
+            return (userAction, userChoice);
+
+        } else if (userAction == BattleChoices.Item) {
+            int userChoice = this.getter.getUserItem(this.Player);;
+            return (userAction, userChoice);
+
+        } else if (userAction == BattleChoices.Run) {
+            return (userAction, defaultInput);
+
+        } else {
+            return (userAction, defaultInput);
+        }
+    }
+
+
+    public void SetMoveOrder(BattleChoices userAction) {
+
+        if (userAction == BattleChoices.Run) {
+            this.moveOrder = this.BattleAllies.Concat(this.BattleEnemies.OrderByDescending(x => x.SPD).ThenBy(x => x.CharacterType));
+        } else {
+            this.moveOrder = this.BattleAllies.Concat(this.BattleEnemies).OrderByDescending(x => x.SPD).ThenBy(x => x.CharacterType);
+        }   
+    }
+
+
+    public void AttackEvent(ICharacter attacker, int userChoice) {
 
         dynamic target = this.Player;
-
-        if (attacker.CharacterType == CharacterType.Player) {
-            int userTarget = this.getter.getUserTarget(this.BattleEnemies);
-            target = this.BattleEnemies[userTarget];
-        }
-        
+        if (attacker.CharacterType == CharacterType.Player) { target = this.BattleEnemies[userChoice]; }        
 
         int attackerDamage = attacker.Attack(target);
         target.TakeHit(attackerDamage);
-        this.battleNotifier.NotifyAttackDamage(attacker.Name, attackerDamage.ToString());
+        this.battleNotifier.NotifyAttackDamage(attacker.Name, attackerDamage, target.Name);
 
         if (target.Status == CharacterStatus.Dead) {
             if (target.CharacterType == CharacterType.Player) {
@@ -116,10 +154,9 @@ public class BattleManager: IBattleManager {
     }
 
 
-    public void ItemUseEvent() {
+    public void ItemUseEvent(int userChoice) {
         
-        int userItem = this.getter.getUserItem(this.Player);
-        var itemToUse = this.Player.Inventory[userItem];
+        var itemToUse = this.Player.Inventory[userChoice];
 
         this.playerStatusNotifier.NotifyItemUse(itemToUse.Name);
 
