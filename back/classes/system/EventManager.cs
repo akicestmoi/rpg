@@ -71,11 +71,6 @@ public class EventManager: IEventManager {
 
             int numberOfThisEnemyType = rnd.Next(1, this.EnemiesTemplate[enemyID].SimultaneousApperance + 1); 
 
-            Console.WriteLine(potentialEnemyID);
-            Console.WriteLine(enemyID);
-            Console.WriteLine(this.EnemiesTemplate[enemyID].SimultaneousApperance);
-            Console.WriteLine(numberOfThisEnemyType);
-
             encounteredEnemies.Add(enemyID, numberOfThisEnemyType);
         }
 
